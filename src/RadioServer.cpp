@@ -25,6 +25,7 @@ void RadioServer::slotNewConnection()
 
 void RadioServer::slotReadyRead()
 {
+    qDebug() << "New connection";
 	QTcpSocket *clientSocket = (QTcpSocket*)sender();
 
     emit parseCommand(clientSocket);

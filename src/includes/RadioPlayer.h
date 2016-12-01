@@ -23,19 +23,28 @@ public:
     inline MusicStream getStream() { return musicStream_; };
 
     inline float getVolume() { return volume_; };
-    bool setVolume(double volume);
+    bool setVolume(float volume);
 	bool decreaseVolume();
 	bool increaseVolume();
 
+    inline int getErrorCode(){ return BASS_ErrorGetCode(); };
+
 private:
+    bool init();
+
     bool connect();
     bool disconnect();
+
 	void loadSettings();
 	void saveSettings();
 
     MusicStream musicStream_;
     HSTREAM streamHandle_;
     double volume_;
+	int autoSaveInterval_;
+
+protected:
+	void timerEvent(QTimerEvent *event);
 
 signals:
 

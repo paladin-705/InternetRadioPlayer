@@ -337,9 +337,12 @@ compiler_clean: compiler_moc_header_clean
 
 ####### Compile
 
-build/debug/InternetRadioPlayer/obj/main.o: src/main.cpp src/includes/DataStructures.h \
+build/debug/InternetRadioPlayer/obj/main.o: src/main.cpp src/includes/RadioPlayerStream.h \
 		src/includes/RadioPlayer.h \
-		import/bass.h
+		src/includes/DataStructures.h \
+		import/bass.h \
+		src/includes/MusicStreamsBase.h \
+		src/includes/RadioServer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/debug/InternetRadioPlayer/obj/main.o src/main.cpp
 
 build/debug/InternetRadioPlayer/obj/RadioClient.o: src/RadioClient.cpp src/includes/RadioClient.h
@@ -350,11 +353,7 @@ build/debug/InternetRadioPlayer/obj/RadioPlayer.o: src/RadioPlayer.cpp src/inclu
 		import/bass.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/debug/InternetRadioPlayer/obj/RadioPlayer.o src/RadioPlayer.cpp
 
-build/debug/InternetRadioPlayer/obj/RadioPlayerStream.o: src/RadioPlayerStream.cpp src/includes/RadioPlayerStream.h \
-		src/includes/RadioPlayer.h \
-		src/includes/DataStructures.h \
-		import/bass.h \
-		src/includes/MusicStreamsBase.h
+build/debug/InternetRadioPlayer/obj/RadioPlayerStream.o: src/RadioPlayerStream.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/debug/InternetRadioPlayer/obj/RadioPlayerStream.o src/RadioPlayerStream.cpp
 
 build/debug/InternetRadioPlayer/obj/RadioServer.o: src/RadioServer.cpp src/includes/RadioServer.h

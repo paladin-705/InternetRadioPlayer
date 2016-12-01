@@ -3,6 +3,13 @@
 RadioPlayer::RadioPlayer()
 {
 	loadSettings();
+
+    if(musicStream_.state == STREAM_PLAY)
+        play();
+    else
+        init();
+
+	startTimer(autoSaveInterval_);
 }
 
 RadioPlayer::~RadioPlayer()
@@ -58,7 +65,7 @@ bool RadioPlayer::stop()
 	return state;
 }
 
-bool RadioPlayer::setVolume(double volume)
+bool RadioPlayer::setVolume(float volume)
 {
 	if (volume < 0)
 		volume = 0;
@@ -66,9 +73,9 @@ bool RadioPlayer::setVolume(double volume)
 	if (volume > 1)
 		volume = 1;
 
+    volume_ = volume;
 	if (BASS_SetVolume(volume_))
 	{
-		volume_ = volume;
 		return true;
 	}
 	else
@@ -88,15 +95,24 @@ bool RadioPlayer::increaseVolume()
 }
 
 //private func:
-bool RadioPlayer::connect()
+bool RadioPlayer::init()
 {
     int device = -1;
     int freq = 44100;
-    BASS_Init(device, freq, 0, 0, NULL);
+
+    BASS_Free();
+    return BASS_Init(device, freq, 0, 0, NULL);
+}
+
+bool RadioPlayer::connect()
+{
+    bool state = init();
+
 
     streamHandle_ = BASS_StreamCreateURL(musicStream_.address.toStdString().c_str(), 0, 0, NULL, 0);
+    state &= streamHandle_;
 
-    return streamHandle_;
+    return state;
 }
 
 bool RadioPlayer::disconnect()
@@ -117,6 +133,8 @@ void RadioPlayer::loadSettings()
     musicStream_.name = settings->value("radioPlayer/streamName", "").toString();
     musicStream_.address = settings->value("radioPlayer/streamAddress", "").toString();
 	
+	autoSaveInterval_ = settings->value("radioPlayer/autoSaveInterval", 5000).toInt();
+
 	delete settings;
 }
 
@@ -131,6 +149,13 @@ void RadioPlayer::saveSettings()
 	settings->setValue("radioPlayer/streamName", musicStream_.name);
 	settings->setValue("radioPlayer/streamAddress", musicStream_.address);
 
+	settings->setValue("radioPlayer/autoSaveInterval", autoSaveInterval_);
+
 	settings->sync();
 	delete settings;
+}
+
+void RadioPlayer::timerEvent(QTimerEvent *event)
+{
+	saveSettings();
 }

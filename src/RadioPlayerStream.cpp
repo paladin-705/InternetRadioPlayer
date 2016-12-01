@@ -21,6 +21,7 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 {
 	int commandType;
 	int status;
+	int errorType = 0;
 
     QByteArray dataArray = clientSocket->readAll();
     QDataStream inputData(&dataArray, QIODevice::ReadOnly);
@@ -39,7 +40,9 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		else
 			status = RESPONSE_ERROR;
 
-        response << status;
+		errorType = radioPlayer->getErrorCode();
+
+        response << status << errorType;
 		break;
 	}
 	case STREAM_PAUSE:
@@ -49,7 +52,9 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		else
 			status = RESPONSE_ERROR;
 
-        response << status;
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_STOP:
@@ -59,7 +64,9 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		else
 			status = RESPONSE_ERROR;
 
-        response << status;
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_NEXT:
@@ -71,7 +78,9 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		else
 			status = RESPONSE_ERROR;
 
-		response << status;
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_PREV:
@@ -83,27 +92,29 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		else
 			status = RESPONSE_ERROR;
 
-		response << status;
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_INFO:
 	{
 		status = RESPONSE_STREAM_STRUCT;
         MusicStream playerStream = radioPlayer->getStream();
-        response << status << playerStream.id << playerStream.state << playerStream.name << playerStream.address;
+        response << status << errorType << playerStream.id << playerStream.state << playerStream.name << playerStream.address;
 		break;
 	}
 	case STREAM_GET_VOLUME:
 	{
 		status = RESPONSE_VOLUME_STRUCT;
-        response << status << radioPlayer->getVolume();
+        response << status << errorType << radioPlayer->getVolume();
 		break;
 	}
 	//-------
 
 	case STREAM_SET_VOLUME:
 	{
-		double volume;
+        float volume;
 		inputData >> volume;
 
 		if (radioPlayer->setVolume(volume))
@@ -111,7 +122,9 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		else
 			status = RESPONSE_ERROR;
 
-        response << status;
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_DECREASE_VOLUME:
@@ -121,7 +134,9 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		else
 			status = RESPONSE_ERROR;
 
-        response << status;
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_INCREASE_VOLUME:
@@ -131,17 +146,45 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		else
 			status = RESPONSE_ERROR;
 
-        response << status;
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	//-------
 
 	case STREAM_SET_WHERE_ID:
 	{
+		int id;
+		inputData >> id;
+
+		MusicStream stream = streamsBase->getStreamWhereId(id);
+
+		if (radioPlayer->setStream(stream))
+			status = RESPONSE_OK;
+		else
+			status = RESPONSE_ERROR;
+
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_SET_WHERE_NAME:
 	{
+		QString name;
+		inputData >> name;
+
+		MusicStream stream = streamsBase->getStreamWhereName(name);
+
+		if (radioPlayer->setStream(stream))
+			status = RESPONSE_OK;
+		else
+			status = RESPONSE_ERROR;
+
+		errorType = radioPlayer->getErrorCode();
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_ADD:
@@ -159,7 +202,13 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 
 	default:
 		status = RESPONSE_ERROR;
+		errorType = ERROR_UNKNOWN_COMMAND;
+		
+		response << status << errorType;
 		break;
 	}
 clientSocket->write(responseArray);
+clientSocket->close();
 }
+
+

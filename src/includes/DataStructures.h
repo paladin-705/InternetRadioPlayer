@@ -1,7 +1,14 @@
 #ifndef DATASTRUCTURES_H
 #define DATASTRUCTURES_H
 
-//Dara structures:
+/*
+Message: [COMMAND_TYPE][OTHER_DATA]
+Response: [RESPONSE_TYPE][ERROR_TYPE][OTHER_DATA]
+
+if RESPONSE_TYPE != RESPONSE_ERROR, ERROR_TYPE = 0
+*/
+
+//Data structures:
 struct MusicStream
 {
 	int id;					//-1 - stream not found
@@ -37,5 +44,8 @@ const int RESPONSE_ERROR = 0x00;
 
 const int RESPONSE_STREAM_STRUCT = 0x10;
 const int RESPONSE_VOLUME_STRUCT = 0x11;
+
+//Error codes:
+const int ERROR_UNKNOWN_COMMAND = 47;
 
 #endif // RADIOSERVER_H
