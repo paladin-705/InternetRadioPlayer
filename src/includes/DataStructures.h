@@ -26,6 +26,7 @@ const int STREAM_STOP = 0x12;
 const int STREAM_NEXT = 0x13;
 const int STREAM_PREV = 0x14;
 const int STREAM_INFO = 0x15;
+const int STREAM_LIST = 0x16;
 
 const int STREAM_GET_VOLUME = 0x20;
 const int STREAM_SET_VOLUME = 0x21;
@@ -43,9 +44,16 @@ const int RESPONSE_OK = 0x01;
 const int RESPONSE_ERROR = 0x00;
 
 const int RESPONSE_STREAM_STRUCT = 0x10;
-const int RESPONSE_VOLUME_STRUCT = 0x11;
+const int RESPONSE_STREAM_LIST_STRUCT = 0x11;
+const int RESPONSE_VOLUME_STRUCT = 0x12;
 
 //Error codes:
 const int ERROR_UNKNOWN_COMMAND = 47;
+const int ERROR_EXEC_QUERY = 48;
+const int ERROR_ADD_STREAM = 49;
+const int ERROR_UPDATE_STREAM = 50;
+const int ERROR_DELETE_STREAM = 51;
+const int ERROR_NEXT_STREAM_NOT_FOUND = 52;
+const int ERROR_PREV_STREAM_NOT_FOUND = 53;
 
 #endif // RADIOSERVER_H

@@ -21,7 +21,11 @@ public:
 	MusicStream getNextStream(int id);
 	MusicStream getPrevStream(int id);
 
+	bool getStreamList(QVector<MusicStream> *);
+
     bool addStream(MusicStream stream);
+	bool updateStream(MusicStream stream);
+	bool deleteStream(int id);
 
 private:
     QSqlDatabase streamBase_;

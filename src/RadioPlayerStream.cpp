@@ -73,26 +73,42 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 	{
         MusicStream nextStream = streamsBase->getNextStream(radioPlayer->getStream().id);
 
-		if (radioPlayer->setStream(nextStream))
-			status = RESPONSE_OK;
-		else
-			status = RESPONSE_ERROR;
+        if(nextStream.id != STREAM_NOT_FOUND)
+        {
+            if (radioPlayer->setStream(nextStream))
+                status = RESPONSE_OK;
+            else
+                status = RESPONSE_ERROR;
 
-		errorType = radioPlayer->getErrorCode();
+            errorType = radioPlayer->getErrorCode();
+        }
+        else
+        {
+            status = RESPONSE_ERROR;
+            errorType = ERROR_NEXT_STREAM_NOT_FOUND;
+        }
 
 		response << status << errorType;
 		break;
 	}
 	case STREAM_PREV:
 	{
-        MusicStream prevStream = streamsBase->getNextStream(radioPlayer->getStream().id);
+        MusicStream prevStream = streamsBase->getPrevStream(radioPlayer->getStream().id);
 
-		if (radioPlayer->setStream(prevStream))
-			status = RESPONSE_OK;
-		else
-			status = RESPONSE_ERROR;
+        if(prevStream.id != STREAM_NOT_FOUND)
+        {
+            if (radioPlayer->setStream(prevStream))
+                status = RESPONSE_OK;
+            else
+                status = RESPONSE_ERROR;
 
-		errorType = radioPlayer->getErrorCode();
+            errorType = radioPlayer->getErrorCode();
+        }
+        else
+        {
+            status = RESPONSE_ERROR;
+            errorType = ERROR_PREV_STREAM_NOT_FOUND;
+        }
 
 		response << status << errorType;
 		break;
@@ -102,6 +118,29 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		status = RESPONSE_STREAM_STRUCT;
         MusicStream playerStream = radioPlayer->getStream();
         response << status << errorType << playerStream.id << playerStream.state << playerStream.name << playerStream.address;
+		break;
+	}
+	case STREAM_LIST:
+	{
+        QVector<MusicStream> streamList;
+
+        if (streamsBase->getStreamList(&streamList))
+		{
+			status = RESPONSE_STREAM_LIST_STRUCT;
+
+			response << status << errorType << streamList.size();
+            for (int i = 0;i < streamList.size(); i++)
+			{
+				response  << streamList.at(i).id << streamList.at(i).state << streamList.at(i).name << streamList.at(i).address;
+			}
+		}
+		else
+		{
+			status = RESPONSE_ERROR;
+			errorType = ERROR_EXEC_QUERY;
+
+			response << status << errorType;
+		}
 		break;
 	}
 	case STREAM_GET_VOLUME:
@@ -189,14 +228,56 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 	}
 	case STREAM_ADD:
 	{
+		MusicStream stream;
+		inputData >> stream.id >> stream.state >> stream.name >> stream.address;
+
+		if (streamsBase->addStream(stream))
+		{
+			status = RESPONSE_OK;
+		}
+		else
+		{
+			status = RESPONSE_ERROR;
+			errorType = ERROR_ADD_STREAM;
+		}
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_UPDATE:
 	{
+		MusicStream stream;
+		inputData >> stream.id >> stream.state >> stream.name >> stream.address;
+
+		if (streamsBase->updateStream(stream))
+		{
+			status = RESPONSE_OK;
+		}
+		else
+		{
+			status = RESPONSE_ERROR;
+			errorType = ERROR_UPDATE_STREAM;
+		}
+
+		response << status << errorType;
 		break;
 	}
 	case STREAM_DELETE:
 	{
+		int id;
+		inputData >> id;
+
+		if (streamsBase->deleteStream(id))
+		{
+			status = RESPONSE_OK;
+		}
+		else
+		{
+			status = RESPONSE_ERROR;
+			errorType = ERROR_DELETE_STREAM;
+		}
+
+		response << status << errorType;
 		break;
 	}
 

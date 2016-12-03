@@ -35,6 +35,7 @@ bool RadioPlayer::setStream(MusicStream musicStream)
 bool RadioPlayer::play()
 {
     bool state = connect();
+    BASS_ChannelSetFX(streamHandle_, BASS_FX_DX8_DISTORTION, 10);
 	state &= BASS_ChannelPlay(streamHandle_, TRUE);
 
 	if (state)
@@ -101,15 +102,27 @@ bool RadioPlayer::init()
     int freq = 44100;
 
     BASS_Free();
-    return BASS_Init(device, freq, 0, 0, NULL);
-}
+    bool state =  BASS_Init(device, freq, BASS_DEVICE_STEREO, 0, NULL);
 
+    if(state)
+    {
+        BASS_INFO info;
+        BASS_GetInfo(&info);
+
+        BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, buffLen_/10);
+        //BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, buffLen_/2);
+        BASS_SetConfig(BASS_CONFIG_BUFFER, buffLen_);
+        BASS_SetConfig(BASS_CONFIG_DEV_BUFFER, buffLen_);
+        BASS_SetConfig(BASS_CONFIG_NET_BUFFER, buffLen_);
+    }
+    return state;
+}
+//private:
 bool RadioPlayer::connect()
 {
     bool state = init();
 
-
-    streamHandle_ = BASS_StreamCreateURL(musicStream_.address.toStdString().c_str(), 0, 0, NULL, 0);
+    streamHandle_ = BASS_StreamCreateURL(musicStream_.address.toStdString().c_str(), 0, BASS_STREAM_BLOCK, 0, 0);
     state &= streamHandle_;
 
     return state;
@@ -134,6 +147,7 @@ void RadioPlayer::loadSettings()
     musicStream_.address = settings->value("radioPlayer/streamAddress", "").toString();
 	
 	autoSaveInterval_ = settings->value("radioPlayer/autoSaveInterval", 5000).toInt();
+    buffLen_ = settings->value("radioPlayer/bufferLeghtn_ms", 15000).toInt();
 
 	delete settings;
 }
@@ -150,12 +164,20 @@ void RadioPlayer::saveSettings()
 	settings->setValue("radioPlayer/streamAddress", musicStream_.address);
 
 	settings->setValue("radioPlayer/autoSaveInterval", autoSaveInterval_);
+    settings->setValue("radioPlayer/bufferLeghtn_ms", buffLen_);
 
 	settings->sync();
 	delete settings;
 }
 
+//protected:
 void RadioPlayer::timerEvent(QTimerEvent *event)
 {
 	saveSettings();
+}
+
+//callbacks:
+void CALLBACK RadioPlayer::downloadProc(const void *buffer, DWORD length, void *user)
+{
+
 }

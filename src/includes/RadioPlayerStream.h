@@ -18,9 +18,6 @@ public:
     void run();
 	
 private:
-	void loadSettings();
-    void saveSettings();
-
     RadioPlayer *radioPlayer;
 	MusicStreamsBase *streamsBase;
 

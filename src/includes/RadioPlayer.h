@@ -38,10 +38,14 @@ private:
 	void loadSettings();
 	void saveSettings();
 
+	//callbacks:
+	void CALLBACK downloadProc(const void *buffer, DWORD length, void *user);
+
     MusicStream musicStream_;
     HSTREAM streamHandle_;
     double volume_;
 	int autoSaveInterval_;
+    int buffLen_;
 
 protected:
 	void timerEvent(QTimerEvent *event);
