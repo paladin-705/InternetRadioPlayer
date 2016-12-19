@@ -1,0 +1,45 @@
+#!/bin/bash
+set -e
+
+function print_help() {
+    echo "parameters:"
+    echo "	-s		select system (linux or linux-arm)"
+	echo "	-h		print help"
+    echo
+}
+
+function install_libs {
+	if [ $system_type = "linux" ]; then
+		echo "copy lib/linux/libbass.so to /usr/lib"
+	elif [ $system_type = "linux-arm" ]; then
+		echo "copy lib/linux-arm/libbass.so to /usr/lib"
+	else
+		echo "please, select correct system: linux or linux-arm.";
+		exit 1;
+	fi
+	
+	cp lib/$system_type/libbass.so /usr/lib
+}
+
+if [ $# = 0 ]; then
+    print_help
+	exit 0
+fi
+
+while getopts "s:h" opt
+do
+    case $opt in
+        s) system_type=$OPTARG;
+			echo "init reposytory for $system_type"
+			install_libs
+			exit 0
+            ;;
+        h) 
+            print_help
+			exit 0
+            ;;
+        *) echo "wrong parameters";
+           exit 1
+            ;;
+        esac
+done

@@ -29,10 +29,11 @@ public:
 
 private:
     QSqlDatabase streamBase_;
-    QString baseFilePath_ = "/media/sf_repository/InternetRadioPlayer/base/";
+    QString baseFilePath_ = "base/";
     QString baseName_ = "MusicStreamsBase.db";
 
     MusicStream getStream(QSqlQuery query);
+
 
 signals:
 

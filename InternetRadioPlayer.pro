@@ -10,7 +10,6 @@ CONFIG(debug, debug|release) {
 }
 
 PROJECT_ROOT_PATH = $${PWD}/
-LIBS_PATH = $${PROJECT_ROOT_PATH}/lib.$${OS_SUFFIX}/
 INC_PATH = $${PROJECT_ROOT_PATH}/src/includes/
 IMPORT_PATH = $${PROJECT_ROOT_PATH}/import/
 BIN_PATH = $${PROJECT_ROOT_PATH}/bin/$${BUILD_FLAG}/
@@ -29,16 +28,14 @@ MOC_DIR = $${BUILD_PATH}/moc/
 OBJECTS_DIR = $${BUILD_PATH}/obj/
 DESTDIR = $${BIN_PATH}/
 
-LIBS += -L$${LIBS_PATH}/ -lbass
+LIBS += -lbass
 INCLUDEPATH += $${INC_PATH}/
 INCLUDEPATH += $${IMPORT_PATH}/
 
 TEMPLATE = app
 
-
 SOURCES += \
     src/main.cpp \
-    src/RadioClient.cpp \
     src/RadioPlayer.cpp \
     src/RadioPlayerStream.cpp \
     src/RadioServer.cpp \
@@ -46,7 +43,6 @@ SOURCES += \
 
 HEADERS += \
     lib/bass.h \
-    $${INC_PATH}/RadioClient.h \
     $${INC_PATH}/RadioPlayer.h \
     $${INC_PATH}/RadioPlayerStream.h \
     $${INC_PATH}/RadioServer.h \
