@@ -18,7 +18,7 @@ CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 INCPATH       = -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I. -Isrc/includes -Iimport -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtSql -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -Ibuild/debug/InternetRadioPlayer/moc
 LINK          = g++
 LFLAGS        = 
-LIBS          = $(SUBLIBS) -L/media/sf_repository/InternetRadioPlayer//lib.// -lbass -lQt5Sql -lQt5Network -lQt5Core -lpthread 
+LIBS          = $(SUBLIBS) -lbass -lQt5Sql -lQt5Network -lQt5Core -lpthread 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /usr/lib/i386-linux-gnu/qt5/bin/qmake
@@ -46,22 +46,18 @@ OBJECTS_DIR   = build/debug/InternetRadioPlayer/obj/
 ####### Files
 
 SOURCES       = src/main.cpp \
-		src/RadioClient.cpp \
 		src/RadioPlayer.cpp \
 		src/RadioPlayerStream.cpp \
 		src/RadioServer.cpp \
-		src/MusicStreamsBase.cpp build/debug/InternetRadioPlayer/moc/moc_RadioClient.cpp \
-		build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp \
+		src/MusicStreamsBase.cpp build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp \
 		build/debug/InternetRadioPlayer/moc/moc_RadioPlayerStream.cpp \
 		build/debug/InternetRadioPlayer/moc/moc_RadioServer.cpp \
 		build/debug/InternetRadioPlayer/moc/moc_MusicStreamsBase.cpp
 OBJECTS       = build/debug/InternetRadioPlayer/obj/main.o \
-		build/debug/InternetRadioPlayer/obj/RadioClient.o \
 		build/debug/InternetRadioPlayer/obj/RadioPlayer.o \
 		build/debug/InternetRadioPlayer/obj/RadioPlayerStream.o \
 		build/debug/InternetRadioPlayer/obj/RadioServer.o \
 		build/debug/InternetRadioPlayer/obj/MusicStreamsBase.o \
-		build/debug/InternetRadioPlayer/obj/moc_RadioClient.o \
 		build/debug/InternetRadioPlayer/obj/moc_RadioPlayer.o \
 		build/debug/InternetRadioPlayer/obj/moc_RadioPlayerStream.o \
 		build/debug/InternetRadioPlayer/obj/moc_RadioServer.o \
@@ -119,7 +115,6 @@ DIST          = /usr/lib/i386-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/i386-linux-gnu/qt5/mkspecs/features/lex.prf \
 		InternetRadioPlayer.pro src/main.cpp \
-		src/RadioClient.cpp \
 		src/RadioPlayer.cpp \
 		src/RadioPlayerStream.cpp \
 		src/RadioServer.cpp \
@@ -277,7 +272,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0 || mkdir -p build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0
-	$(COPY_FILE) --parents $(DIST) build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0/ && $(COPY_FILE) --parents lib/bass.h src/includes/RadioClient.h src/includes/RadioPlayer.h src/includes/RadioPlayerStream.h src/includes/RadioServer.h src/includes/MusicStreamsBase.h src/includes/DataStructures.h build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/RadioClient.cpp src/RadioPlayer.cpp src/RadioPlayerStream.cpp src/RadioServer.cpp src/MusicStreamsBase.cpp build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0/ && (cd `dirname build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0` && $(TAR) InternetRadioPlayer1.0.0.tar InternetRadioPlayer1.0.0 && $(COMPRESS) InternetRadioPlayer1.0.0.tar) && $(MOVE) `dirname build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0`/InternetRadioPlayer1.0.0.tar.gz . && $(DEL_FILE) -r build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0
+	$(COPY_FILE) --parents $(DIST) build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0/ && $(COPY_FILE) --parents import/bass.h src/includes/RadioClient.h src/includes/RadioPlayer.h src/includes/RadioPlayerStream.h src/includes/RadioServer.h src/includes/MusicStreamsBase.h src/includes/DataStructures.h build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/RadioPlayer.cpp src/RadioPlayerStream.cpp src/RadioServer.cpp src/MusicStreamsBase.cpp build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0/ && (cd `dirname build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0` && $(TAR) InternetRadioPlayer1.0.0.tar InternetRadioPlayer1.0.0 && $(COMPRESS) InternetRadioPlayer1.0.0.tar) && $(MOVE) `dirname build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0`/InternetRadioPlayer1.0.0.tar.gz . && $(DEL_FILE) -r build/debug/InternetRadioPlayer/obj/InternetRadioPlayer1.0.0
 
 
 clean:compiler_clean 
@@ -300,12 +295,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: build/debug/InternetRadioPlayer/moc/moc_RadioClient.cpp build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp build/debug/InternetRadioPlayer/moc/moc_RadioPlayerStream.cpp build/debug/InternetRadioPlayer/moc/moc_RadioServer.cpp build/debug/InternetRadioPlayer/moc/moc_MusicStreamsBase.cpp
+compiler_moc_header_make_all: build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp build/debug/InternetRadioPlayer/moc/moc_RadioPlayerStream.cpp build/debug/InternetRadioPlayer/moc/moc_RadioServer.cpp build/debug/InternetRadioPlayer/moc/moc_MusicStreamsBase.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) build/debug/InternetRadioPlayer/moc/moc_RadioClient.cpp build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp build/debug/InternetRadioPlayer/moc/moc_RadioPlayerStream.cpp build/debug/InternetRadioPlayer/moc/moc_RadioServer.cpp build/debug/InternetRadioPlayer/moc/moc_MusicStreamsBase.cpp
-build/debug/InternetRadioPlayer/moc/moc_RadioClient.cpp: src/includes/RadioClient.h
-	/usr/lib/i386-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/media/sf_repository/InternetRadioPlayer -I/media/sf_repository/InternetRadioPlayer/src/includes -I/media/sf_repository/InternetRadioPlayer/import -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtSql -I/usr/include/i386-linux-gnu/qt5/QtNetwork -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/i386-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/i586-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/i586-linux-gnu/4.9/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include src/includes/RadioClient.h -o build/debug/InternetRadioPlayer/moc/moc_RadioClient.cpp
-
+	-$(DEL_FILE) build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp build/debug/InternetRadioPlayer/moc/moc_RadioPlayerStream.cpp build/debug/InternetRadioPlayer/moc/moc_RadioServer.cpp build/debug/InternetRadioPlayer/moc/moc_MusicStreamsBase.cpp
 build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp: src/includes/DataStructures.h \
 		import/bass.h \
 		src/includes/RadioPlayer.h
@@ -345,9 +337,6 @@ build/debug/InternetRadioPlayer/obj/main.o: src/main.cpp src/includes/RadioPlaye
 		src/includes/RadioServer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/debug/InternetRadioPlayer/obj/main.o src/main.cpp
 
-build/debug/InternetRadioPlayer/obj/RadioClient.o: src/RadioClient.cpp src/includes/RadioClient.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/debug/InternetRadioPlayer/obj/RadioClient.o src/RadioClient.cpp
-
 build/debug/InternetRadioPlayer/obj/RadioPlayer.o: src/RadioPlayer.cpp src/includes/RadioPlayer.h \
 		src/includes/DataStructures.h \
 		import/bass.h
@@ -362,9 +351,6 @@ build/debug/InternetRadioPlayer/obj/RadioServer.o: src/RadioServer.cpp src/inclu
 build/debug/InternetRadioPlayer/obj/MusicStreamsBase.o: src/MusicStreamsBase.cpp src/includes/MusicStreamsBase.h \
 		src/includes/DataStructures.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/debug/InternetRadioPlayer/obj/MusicStreamsBase.o src/MusicStreamsBase.cpp
-
-build/debug/InternetRadioPlayer/obj/moc_RadioClient.o: build/debug/InternetRadioPlayer/moc/moc_RadioClient.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/debug/InternetRadioPlayer/obj/moc_RadioClient.o build/debug/InternetRadioPlayer/moc/moc_RadioClient.cpp
 
 build/debug/InternetRadioPlayer/obj/moc_RadioPlayer.o: build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/debug/InternetRadioPlayer/obj/moc_RadioPlayer.o build/debug/InternetRadioPlayer/moc/moc_RadioPlayer.cpp
