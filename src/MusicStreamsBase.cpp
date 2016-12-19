@@ -11,6 +11,7 @@ MusicStreamsBase::MusicStreamsBase()
     }
     else
     {
+        streamBase_.exec("DROP TABLE IF EXISTS musicStreams; CREATE TABLE musicStreams (ID INTEGER PRIMARY KEY AUTOINCREMENT, streamName TEXT UNIQUE ON CONFLICT FAIL, streamAddress TEXT);");
         qDebug() << "------- Database opened -------";
     }
 }
