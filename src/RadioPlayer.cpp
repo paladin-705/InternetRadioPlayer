@@ -35,7 +35,6 @@ bool RadioPlayer::setStream(MusicStream musicStream)
 bool RadioPlayer::play()
 {
     bool state = connect();
-    BASS_ChannelSetFX(streamHandle_, BASS_FX_DX8_DISTORTION, 10);
 	state &= BASS_ChannelPlay(streamHandle_, TRUE);
 
 	if (state)
