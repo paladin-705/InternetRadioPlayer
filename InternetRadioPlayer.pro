@@ -42,7 +42,6 @@ SOURCES += \
     src/MusicStreamsBase.cpp \
 
 HEADERS += \
-    lib/bass.h \
     $${INC_PATH}/RadioPlayer.h \
     $${INC_PATH}/RadioPlayerStream.h \
     $${INC_PATH}/RadioServer.h \
