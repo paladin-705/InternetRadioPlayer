@@ -122,6 +122,10 @@ bool RadioPlayer::connect()
     bool state = init();
 
     streamHandle_ = BASS_StreamCreateURL(musicStream_.address.toStdString().c_str(), 0, BASS_STREAM_BLOCK, 0, 0);
+
+    if(streamHandle_ == 0)
+        streamHandle_ = BASS_StreamCreateFile(FALSE,musicStream_.address.toStdString().c_str(),0,0,BASS_STREAM_DECODE);
+
     state &= streamHandle_;
 
     return state;
