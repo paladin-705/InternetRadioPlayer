@@ -1,6 +1,6 @@
-InternetRadioPlayer
+Internet Radio Player
 =========================
-Internet radio player program
+Cross-platform internet radio player program 
 
 INSTALLATION
 ------------
