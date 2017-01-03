@@ -13,6 +13,7 @@ public:
 
 private:
 	QTcpServer *server;
+    int _serverPort = 1234;
 
 signals:
     void parseCommand(QTcpSocket *clientSocket);

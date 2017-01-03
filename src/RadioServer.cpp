@@ -2,9 +2,16 @@
 
 RadioServer::RadioServer()
 {
+    qDebug() << "Starting server...";
+
 	server = new QTcpServer();
-    qDebug() << "server listen = " << server->listen(QHostAddress::Any, 1234);
-    connect(server, SIGNAL(newConnection()), this, SLOT(slotNewConnection())); //
+
+    if(server->listen(QHostAddress::Any, _serverPort))
+        qDebug() << "Server listen port: " << _serverPort;
+    else
+        qCritical() << "Server starting error: " << server->serverError();
+
+    connect(server, SIGNAL(newConnection()), this, SLOT(slotNewConnection()));
 }
 
 RadioServer::~RadioServer()
@@ -25,7 +32,6 @@ void RadioServer::slotNewConnection()
 
 void RadioServer::slotReadyRead()
 {
-    qDebug() << "New connection";
 	QTcpSocket *clientSocket = (QTcpSocket*)sender();
 
     emit parseCommand(clientSocket);

@@ -109,7 +109,6 @@ bool RadioPlayer::init()
         BASS_GetInfo(&info);
 
         BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, buffLen_/10);
-        //BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, buffLen_/2);
         BASS_SetConfig(BASS_CONFIG_BUFFER, buffLen_);
         BASS_SetConfig(BASS_CONFIG_DEV_BUFFER, buffLen_);
         BASS_SetConfig(BASS_CONFIG_NET_BUFFER, buffLen_);

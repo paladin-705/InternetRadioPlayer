@@ -21,6 +21,8 @@ TARGET = InternetRadioPlayer
 CONFIG   += console
 CONFIG   -= app_bundle
 
+DEFINES += QT_MESSAGELOGCONTEXT
+
 BUILD_PATH = $${PROJECT_ROOT_PATH}/build/$${BUILD_FLAG}/$${TARGET}/
 RCC_DIR = $${BUILD_PATH}/rcc/
 UI_DIR = $${BUILD_PATH}/ui/

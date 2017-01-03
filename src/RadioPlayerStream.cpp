@@ -288,6 +288,12 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 		response << status << errorType;
 		break;
 	}
+
+    if(status == RESPONSE_ERROR)
+    {
+        qWarning() << "Response error: " << errorType;
+    }
+
 clientSocket->write(responseArray);
 clientSocket->close();
 }

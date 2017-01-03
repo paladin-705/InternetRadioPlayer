@@ -2,17 +2,19 @@
 
 MusicStreamsBase::MusicStreamsBase()
 {
+    qDebug() << "Opening database...";
+
     streamBase_ = QSqlDatabase::addDatabase("QSQLITE");
     streamBase_.setDatabaseName(baseFilePath_ + baseName_);
 
     if (!streamBase_.open())
     {
-        qDebug() << streamBase_.lastError().text();
+        qWarning() << streamBase_.lastError().text();
     }
     else
     {
         streamBase_.exec("CREATE TABLE musicStreams (ID INTEGER PRIMARY KEY AUTOINCREMENT, streamName TEXT UNIQUE ON CONFLICT FAIL, streamAddress TEXT);");
-        qDebug() << "------- Database opened -------";
+        qDebug() << "Database opened";
     }
 }
 
@@ -73,12 +75,12 @@ MusicStream MusicStreamsBase::getStream(QSqlQuery query)
         }
         else
         {
-            qDebug() << "getStream parse error:  " << query.lastError();
+            qWarning() << "parse error:  " << query.lastError();
         }
 	}
     else
     {
-        qDebug() << "getStream error:  " << query.lastError();
+        qWarning() << query.lastError();
     }
 	return stream;
 }
@@ -117,7 +119,7 @@ bool MusicStreamsBase::addStream(MusicStream stream)
 	}
 	else
 	{
-		qDebug() << "addStream error:  " << query.lastError();
+        qWarning() << query.lastError();
 		return false;
 	}
 
@@ -137,7 +139,7 @@ bool MusicStreamsBase::updateStream(MusicStream stream)
 	}
 	else
 	{
-		qDebug() << "addStream error:  " << query.lastError();
+        qWarning() << query.lastError();
 		return false;
 	}
 
@@ -155,8 +157,7 @@ bool MusicStreamsBase::deleteStream(int id)
 	}
 	else
 	{
-		qDebug() << "addStream error:  " << query.lastError();
+        qWarning() << query.lastError();
 		return false;
 	}
-
 }
