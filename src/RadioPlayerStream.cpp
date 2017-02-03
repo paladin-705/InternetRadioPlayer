@@ -35,36 +35,39 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
 	{
 	case STREAM_PLAY:
 	{
-		if (radioPlayer->play())
+        radioPlayer->play();
+        errorType = radioPlayer->getErrorCode();
+
+        if (!errorType)
 			status = RESPONSE_OK;
 		else
 			status = RESPONSE_ERROR;
-
-		errorType = radioPlayer->getErrorCode();
 
         response << status << errorType;
 		break;
 	}
 	case STREAM_PAUSE:
 	{
-		if (radioPlayer->pause())
+        radioPlayer->pause();
+        errorType = radioPlayer->getErrorCode();
+
+        if (!errorType)
 			status = RESPONSE_OK;
 		else
 			status = RESPONSE_ERROR;
-
-		errorType = radioPlayer->getErrorCode();
 
 		response << status << errorType;
 		break;
 	}
 	case STREAM_STOP:
 	{
-		if (radioPlayer->stop())
+        radioPlayer->stop();
+        errorType = radioPlayer->getErrorCode();
+
+        if (!errorType)
 			status = RESPONSE_OK;
 		else
 			status = RESPONSE_ERROR;
-
-		errorType = radioPlayer->getErrorCode();
 
 		response << status << errorType;
 		break;
@@ -156,36 +159,39 @@ void RadioPlayerStream::parseCommandSlot(QTcpSocket *clientSocket)
         float volume;
 		inputData >> volume;
 
-		if (radioPlayer->setVolume(volume))
+        radioPlayer->setVolume(volume);
+        errorType = radioPlayer->getErrorCode();
+
+        if (!errorType)
 			status = RESPONSE_OK;
 		else
 			status = RESPONSE_ERROR;
-
-		errorType = radioPlayer->getErrorCode();
 
 		response << status << errorType;
 		break;
 	}
 	case STREAM_DECREASE_VOLUME:
 	{
-		if (radioPlayer->decreaseVolume())
+        radioPlayer->decreaseVolume();
+        errorType = radioPlayer->getErrorCode();
+
+        if (!errorType)
 			status = RESPONSE_OK;
 		else
 			status = RESPONSE_ERROR;
-
-		errorType = radioPlayer->getErrorCode();
 
 		response << status << errorType;
 		break;
 	}
 	case STREAM_INCREASE_VOLUME:
 	{
-		if (radioPlayer->increaseVolume())
+        radioPlayer->increaseVolume();
+        errorType = radioPlayer->getErrorCode();
+
+        if (!errorType)
 			status = RESPONSE_OK;
 		else
 			status = RESPONSE_ERROR;
-
-		errorType = radioPlayer->getErrorCode();
 
 		response << status << errorType;
 		break;

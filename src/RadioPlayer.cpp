@@ -5,7 +5,10 @@ RadioPlayer::RadioPlayer()
 	loadSettings();
 
     if(musicStream_.state == STREAM_PLAY)
+    {
+        musicStream_.state = STREAM_STOP;
         play();
+    }
     else
         init();
 
@@ -34,35 +37,62 @@ bool RadioPlayer::setStream(MusicStream musicStream)
 
 bool RadioPlayer::play()
 {
-    bool state = connect();
-	state &= BASS_ChannelPlay(streamHandle_, TRUE);
+    if(musicStream_.state != STREAM_PLAY)
+    {
+        connect();
+        BASS_ChannelPlay(streamHandle_, TRUE);
 
-	if (state)
-		musicStream_.state = STREAM_PLAY;
+        if (getErrorCode() == 0)
+            musicStream_.state = STREAM_PLAY;
+        else
+            return false;
 
-    return state;
+        return true;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 bool RadioPlayer::pause()
 {
-	bool state = BASS_ChannelStop(streamHandle_);
-	state &= disconnect();
+    if(musicStream_.state != STREAM_PAUSE)
+    {
+        BASS_ChannelStop(streamHandle_);
+        disconnect();
 
-	if (state)
-		musicStream_.state = STREAM_PAUSE;
+        if (getErrorCode() == 0)
+            musicStream_.state = STREAM_PAUSE;
+        else
+            return false;
 
-	return state;
+        return true;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 bool RadioPlayer::stop()
 {
-	bool state = BASS_ChannelStop(streamHandle_);
-	state &= disconnect();
+    if(musicStream_.state != STREAM_STOP)
+    {
+        BASS_ChannelStop(streamHandle_);
+        disconnect();
 
-	if (state)
-		musicStream_.state = STREAM_STOP;
+        if (getErrorCode() == 0)
+            musicStream_.state = STREAM_STOP;
+        else
+            return false;
 
-	return state;
+        return true;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 bool RadioPlayer::setVolume(float volume)
