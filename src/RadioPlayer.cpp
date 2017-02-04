@@ -30,7 +30,10 @@ bool RadioPlayer::setStream(MusicStream musicStream)
 		return false;
 
 	if (musicStream_.state == STREAM_PLAY)
+	{
+		musicStream_.state = STREAM_STOP;
 		play();
+	}
 
 	return true;
 }
