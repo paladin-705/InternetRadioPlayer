@@ -126,7 +126,16 @@ ApplicationWindow {
                 onClicked:
                 {
                     if(textFieldAddress.text != "" && textFieldPort.text != "")
+                    {
                         buttonSignal("saveSetting");
+                    }
+                    else
+                    {
+                        if(textFieldAddress.text == "" )
+                            textFieldAddress.forceActiveFocus();
+                        else if(textFieldPort.text == "" )
+                            textFieldPort.forceActiveFocus();
+                    }
                 }
             }
 
