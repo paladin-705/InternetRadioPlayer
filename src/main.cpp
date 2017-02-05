@@ -31,8 +31,6 @@ int main(int argc, char *argv[])
     QObject::connect(radioServer, SIGNAL(parseCommand(QTcpSocket*)), playerStream, SLOT(parseCommandSlot(QTcpSocket*)));
 
     return a.exec();
-	delete playerStream;
-    delete radioServer;
 }
 
 void logMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
