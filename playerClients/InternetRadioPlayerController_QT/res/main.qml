@@ -120,7 +120,7 @@ ApplicationWindow {
                 objectName: "buttonSave"
 
                 x: 8
-                y: 94
+                y: 100
                 text: qsTr("Save")
 
                 onClicked:
@@ -138,7 +138,7 @@ ApplicationWindow {
                 y: 19
                 width: 624
                 height: 43
-                placeholderText: qsTr("Введите IP адрес")
+                placeholderText: qsTr("Enter IP address")
 
             }
 
@@ -150,7 +150,7 @@ ApplicationWindow {
                 y: 63
                 width: 624
                 height: 43
-                placeholderText: qsTr("Введите порт")
+                placeholderText: qsTr("Enter port")
             }
         }
     }
